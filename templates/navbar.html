@@ -1,0 +1,24 @@
+<nav>
+    <ul>
+      <li>
+        <a href="/dashboard">
+          <span><i class="fa-solid fa-gauge"></i></span>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      {% if current_user.is_authenticated %}
+      <li>
+        <a href="/users">
+          <span><i class="fa fa-users" aria-hidden="true"></i></span>
+          <span>User Management</span>
+        </a>
+      </li>
+      {% endif %}
+      <li>
+        <a href="/logout">
+          <span><i class="fa fa-power-off"></i></span>
+          <span>Logout</span>
+        </a>
+      </li>
+    </ul>
+  </nav>

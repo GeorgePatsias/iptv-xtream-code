@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Dashboard | Streamflix</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="static/css/dashboard.css" rel="stylesheet" />
+  </script>
+</head>
+
+
+<body>
+  <div class="header">
+    <a href="#" class="nav-trigger"><span></span></a>
+  </div>
+  <div class="side-nav">
+    <div class="logo">
+      <img id="logo_img" src="/static/img/logo.png" alt="LOGO">
+    </div>
+    {% include 'navbar.html' %}
+  </div>
+
+
+  <div class="main-content">
+    <div class="title">
+      <span><i class="fa-solid fa-gauge"></i></span>
+      Dashboard
+    </div>
+
+
+    <div class="main">
+      <div class="widget">
+        <div class="title">Number of views</div>
+        <div class="chart"></div>
+      </div>
+      <div class="widget">
+        <div class="title">Number of likes</div>
+        <div class="chart"></div>
+      </div>
+      <div class="widget">
+        <div class="title">Number of comments</div>
+        <div class="chart"></div>
+      </div>
+    </div>
+
+
+  </div>
+
+  {% include 'scripts.html' %}
+</body>
+
+</html>
