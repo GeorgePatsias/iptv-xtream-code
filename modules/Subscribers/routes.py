@@ -72,7 +72,7 @@ def add_subscriber():
         notes = request.form['notes'] or ''
 
         if not username or not password or not server or not expiration:
-            return redirect(url_for('subscribers.subscribers_error', error_message='Something went wrong, please try again!'))
+            return redirect(url_for('subscribers.subscribers_error', error_message='Please fill the form properly and try again!'))
 
         username = escape(username)
         password = escape(password)

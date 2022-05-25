@@ -18,6 +18,7 @@ import modules.Dashboard.routes
 import modules.Subscribers.routes
 
 app = Flask(__name__)
+app.secret_key = urandom(60)
 Compress(app)
 
 
@@ -75,10 +76,9 @@ def make_session_permanent():
     app.permanent_session_lifetime = timedelta(minutes=config.SESSION_EXPIRE)
     session.modified = True
 
+app.secret_key = "super secret key"
 
 if __name__ == '__main__':
-    app.secret_key = urandom(60)
-
     app.config.update(
         # SESSION_COOKIE_SECURE=True,
         SESSION_COOKIE_SECURE=False,

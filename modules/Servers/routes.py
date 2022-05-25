@@ -78,9 +78,9 @@ def server_add():
 
         col_servers = mongo_client[config.MONGO_DB][config.MONGO_SERVERS_COLLECTION]
 
-        server_exists = col_servers.find_one({'server': server}, {'_id': 0})
+        server_exists = col_servers.find_one({'server': server, 'username': username}, {'_id': 0})
         if server_exists:
-            return redirect(url_for('servers.server_error', error_message='A Server with the same URL already exists, try a different one!'))
+            return redirect(url_for('servers.server_error', error_message='A Server with the same URL and username already exists, try a different one!'))
 
         added_server = col_servers.insert_one({'server': server, 'username': username, 'password': password, 'created_at': datetime.now(), 'notes': notes})
         if not added_server.inserted_id:

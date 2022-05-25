@@ -81,9 +81,10 @@ $(document).ready(function () {
         $("#inputEditOldUsername").val(data.username);
         $("#inputEditUsername").val(data.username);
         $("#inputEditPassword").val(data.password);
-        $("#selectEditServer").val(data.server);
         $("#inputEditExpiration").val(expiring_date);
         $("#inputEditNotes").val(data.notes);
+        $("#selectEditServer").val(data.server);
+
 
         if (data.locked == "true") {
             $("#btnModalLock").text("Unlock");
