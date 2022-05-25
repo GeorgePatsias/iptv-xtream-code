@@ -1,10 +1,5 @@
 import config
-from flask_login import UserMixin
 from modules.Shared.Logger import logger
-
-
-class User(UserMixin):
-    pass
 
 
 def valid_api(api_key):

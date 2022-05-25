@@ -1,24 +1,30 @@
-<nav>
-    <ul>
-      <li>
-        <a href="/dashboard">
-          <span><i class="fa-solid fa-gauge"></i></span>
-          <span>Dashboard</span>
+<div id="layoutSidenav_nav">
+  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+      <div class="nav">
+        <div class="sb-sidenav-menu-heading">Core</div>
+        <a class="nav-link" href="/dashboard">
+          <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt me-1" aria-hidden="true"></i></div>
+          Dashboard
         </a>
-      </li>
-      {% if current_user.is_authenticated %}
-      <li>
-        <a href="/users">
-          <span><i class="fa fa-users" aria-hidden="true"></i></span>
-          <span>User Management</span>
+        <div class="sb-sidenav-menu-heading">Management</div>
+        <a class="nav-link" href="/admins">
+          <div class="sb-nav-link-icon"><i class="fa-solid fa-user-astronaut me-1" aria-hidden="true"></i></div>
+          Admins
         </a>
-      </li>
-      {% endif %}
-      <li>
-        <a href="/logout">
-          <span><i class="fa fa-power-off"></i></span>
-          <span>Logout</span>
+        <a class="nav-link" href="/servers">
+          <div class="sb-nav-link-icon"><i class="fas fa-server me-1" aria-hidden="true"></i></div>
+          Servers
         </a>
-      </li>
-    </ul>
+        <a class="nav-link" href="/subscribers">
+          <div class="sb-nav-link-icon"><i class="fa fa-users me-1" aria-hidden="true"></i></div>
+          Subscribers
+        </a>
+      </div>
+    </div>
+    <div class="sb-sidenav-footer">
+      <div class="small">Logged in as:</div>
+      {{ current_user.id }}
+    </div>
   </nav>
+</div>

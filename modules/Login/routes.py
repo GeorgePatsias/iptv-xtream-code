@@ -2,7 +2,7 @@
 from uuid import uuid4
 from modules.Shared.Logger import logger
 from modules.Shared.CSRF import CSRFClass
-from modules.Users.controllers import User
+from modules.Shared.UserClass import User
 from modules.Shared.Headers import headers
 from modules.Login.controllers import valid_user
 from flask import Blueprint, render_template, request, redirect, escape
@@ -23,7 +23,7 @@ def login_view():
 
     except Exception as e:
         logger.exception(e)
-        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='*Invalid credentials!')
+        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='Invalid credentials!')
 
 
 @app.route('/login', methods=['POST'])
@@ -31,7 +31,7 @@ def login_view():
 def login_submit():
     try:
         if not CSRFClass().is_valid_csrf(request.form['csrf_token']):
-            return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='*Please refresh the page and try again!')
+            return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='Please refresh the page and try again!')
 
         if current_user.is_authenticated:
             return redirect('/dashboard', code=302)
@@ -44,11 +44,11 @@ def login_submit():
 
             return redirect('/dashboard', code=302)
 
-        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='*Please refresh the page and try again!')
+        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='Invalid credentials!')
 
     except Exception as e:
         logger.exception(e)
-        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='*Invalid credentials!')
+        return render_template('login.html', csrf_token=CSRFClass().generate_CSRF(), error_message='Something went wrong, please try again!')
 
 
 @app.route('/logout', methods=['GET'])
@@ -62,17 +62,3 @@ def logout():
     except Exception as e:
         logger.exception(e)
         return redirect('/login', code=302)
-
-
-@app.route('/test', methods=['GET'])
-@headers
-def test():
-    from modules.Shared.MongoClient import mongo_client
-    import config
-    col_users = mongo_client[config.MONGO_DB][config.MONGO_USERS_COLLECTION]
-
-    from werkzeug.security import generate_password_hash
-
-    
-    col_users.insert_one({'username': '3152673', 'password': '901859138', 'server': 'http://8kott.cx', 'created_at': "25/10/2022", 'expires_at': "25/10/2023", 'last_activity': "21/05/2022", 'notes': "My Notes here..."})
-    return '', 200

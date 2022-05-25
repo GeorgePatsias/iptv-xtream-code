@@ -3,53 +3,74 @@
 
 <head>
   <title>Dashboard | Streamflix</title>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <link href="static/css/dashboard.css" rel="stylesheet" />
-  </script>
+  {% include 'head.html' %}
 </head>
 
+<body class="sb-nav-fixed">
+  {% include 'topbar.html' %}
 
-<body>
-  <div class="header">
-    <a href="#" class="nav-trigger"><span></span></a>
-  </div>
-  <div class="side-nav">
-    <div class="logo">
-      <img id="logo_img" src="/static/img/logo.png" alt="LOGO">
-    </div>
+  <div id="layoutSidenav">
     {% include 'navbar.html' %}
-  </div>
+
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Dashboard</h1>
+          <div class="row">
+            <div class="col-xl-6">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <i class="fa-solid fa-chart-line me-1"></i>
+                  Stream Traffic
+                </div>
+                <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+              </div>
+            </div>
+            <div class="col-xl-6">
+              <div class="card mb-4">
+                <div class="card-header">
+                  <i class="fa fa-users me-1" aria-hidden="true"></i>
+                  Active Subscribers
+                </div>
+                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                <input id="barChartData" value="{{ bar_chard_data|e }}" autocomplete="false" readonly>
+              </div>
+            </div>
+          </div>
 
 
-  <div class="main-content">
-    <div class="title">
-      <span><i class="fa-solid fa-gauge"></i></span>
-      Dashboard
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </main>
+      {% include 'footer.html' %}
     </div>
-
-
-    <div class="main">
-      <div class="widget">
-        <div class="title">Number of views</div>
-        <div class="chart"></div>
-      </div>
-      <div class="widget">
-        <div class="title">Number of likes</div>
-        <div class="chart"></div>
-      </div>
-      <div class="widget">
-        <div class="title">Number of comments</div>
-        <div class="chart"></div>
-      </div>
-    </div>
-
-
   </div>
-
   {% include 'scripts.html' %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" crossorigin="anonymous"></script>
+  <!-- <script src="static/js/imported/chart-area-demo.js"></script> -->
+  <!-- <script src="static/js/imported/chart-bar-demo.js"></script> -->
+
+
+
+
+  <script src="static/js/dashboard.js"></script>
+
 </body>
 
 </html>

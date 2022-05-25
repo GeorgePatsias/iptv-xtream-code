@@ -1,19 +1,40 @@
 import config
+from flask import escape
+from datetime import datetime
 from modules.Shared.Logger import logger
 from modules.Shared.MongoClient import mongo_client
 
 
-def valid_user(username='', password=''):
+def valid_subscriber(username='', password=''):
     try:
-        col_users = mongo_client[config.MONGO_DB][config.MONGO_USERS_COLLECTION]
-        if col_users.find_one({"user_info.username": username, "user_info.password": password}):
+        username = escape(username)
+        password = escape(password)
 
-            return True
+        col_subscribers = mongo_client[config.MONGO_DB][config.MONGO_SUBSCRIBER_COLLECTION]
 
-        logger.info('INVALID/EXPIRED USER {}:{}'.format(username, password))
-        return False
+        subsriber_server = col_subscribers.find_one({
+            'username': username,
+            'password': password,
+            'locked': 'false',
+            'expires_at': {
+                '$gte': datetime.now()
+            }
+        }, {
+            '_id': 0, 'server': 1
+        })
 
-    except Exception:
+        if not subsriber_server:
+            logger.info('INVALID/EXPIRED USER {}:{}'.format(username, password))
+            return None, None, None
 
-        logger.info('INVALID/EXPIRED USER {}:{}'.format(username, password))
-        return False
+        col_servers = mongo_client[config.MONGO_DB][config.MONGO_SERVERS_COLLECTION]
+
+        server_data = col_servers.find_one({'server': subsriber_server['server']}, {'_id': 0, 'username': 1, 'password': 1})
+        if not server_data:
+            return None, None, None
+
+        return subsriber_server['server'], server_data['username'], server_data['password']
+
+    except Exception as e:
+        logger.exception(e)
+        return None, None, None

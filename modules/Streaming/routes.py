@@ -1,40 +1,67 @@
 import config
 import requests
-from flask import request, redirect, Blueprint
-from modules.Streaming.controllers import valid_user
+from datetime import datetime
+from modules.Shared.Logger import logger
+from modules.Shared.MongoClient import mongo_client
+from flask import request, redirect, Blueprint, escape
+from modules.Streaming.controllers import valid_subscriber
 
 app = Blueprint('streaming', __name__)
 
 
 @app.route('/player_api.php', methods=['GET'])
 def player_api():
-    if not valid_user(request.args.get('username', None), request.args.get('password', None)):
-        return {}, 401
-
-    response = requests.get("{}/player_api.php".format(config.API_URL), params=request.args, headers=request.headers, timeout=20)
-
     try:
-        response_json = response.json()
-        if response_json.get('server_info', None):
-            response_json['server_info']['url'] = config.SERVER_IP
-            response_json['server_info']['port'] = config.SERVER_PORT
+        subscriber_server, server_username, server_password = valid_subscriber(request.args.get('username', None), request.args.get('password', None))
 
-            return response_json, response.status_code
+        if not subscriber_server or not server_username or not server_password:
+            return {}, 401
 
-    except Exception:
-        pass
+        username = request.args.get('username')
+        password = request.args.get('password')
 
-    return response.text or {}, response.status_code
+        col_subscribers = mongo_client[config.MONGO_DB][config.MONGO_SUBSCRIBER_COLLECTION]
+        col_subscribers.update_one({'username': username, 'password': password}, {'$set': {'last_activity': datetime.now()}})
+
+        request_arguments = request.args.copy()
+        request_arguments['username'] = server_username
+        request_arguments['password'] = server_password
+
+        response = requests.get('{}/player_api.php'.format(subscriber_server), params=request_arguments, headers=request.headers, timeout=20)
+
+        try:
+            response_json = response.json()
+
+            if response_json.get('server_info', None) and response_json.get('user_info', None):
+                response_json['user_info']['username'] = username
+                response_json['user_info']['password'] = password
+                response_json['server_info']['url'] = config.STREAMFLIX_SERVER_IP
+                response_json['server_info']['port'] = config.STREAMFLIX_SERVER_PORT
+
+                return response_json, response.status_code
+
+        except Exception:
+            pass
+
+        return response.text or {}, response.status_code
+    except Exception as e:
+        logger.exception(e)
+        return {}, 500
 
 
 @app.route('/xmltv.php', methods=['GET'])
 def xmltv():
     try:
-        parameters = request.args
-        if not valid_user(parameters.get('username', None), parameters.get('password', None)):
+        subscriber_server, server_username, server_password = valid_subscriber(request.args.get('username', None), request.args.get('password', None))
+
+        if not subscriber_server or not server_username or not server_password:
             return {}, 401
 
-        response = requests.get('{}/xmltv.php'.format(config.API_URL), headers=request.headers, params=parameters, timeout=20)
+        request_arguments = request.args.copy()
+        request_arguments['username'] = server_username
+        request_arguments['password'] = server_password
+
+        response = requests.get('{}/xmltv.php'.format(subscriber_server), headers=request.headers, params=request_arguments, timeout=20)
 
         return response.text or {}, response.status_code
     except Exception:
@@ -43,29 +70,35 @@ def xmltv():
 
 @app.route('/live/<username>/<password>/<stream_file>', methods=['GET'])
 def live_stream(username, password, stream_file):
-    if not valid_user(username, password):
+    subscriber_server, server_username, server_password = valid_subscriber(username, password)
+
+    if not subscriber_server or not server_username or not server_password:
         return {}, 401
 
-    url = '{}/live/{}/{}/{}'.format(config.API_URL, username, password, stream_file)
+    url = '{}/live/{}/{}/{}'.format(subscriber_server, server_username, server_password, stream_file)
 
-    return redirect(url, code=308)
+    return redirect(url, code=302)
 
 
 @app.route('/movie/<username>/<password>/<stream_file>', methods=['GET'])
 def movie_stream(username, password, stream_file):
-    if not valid_user(username, password):
+    subscriber_server, server_username, server_password = valid_subscriber(request.args.get('username', None), request.args.get('password', None))
+
+    if not subscriber_server or not server_username or not server_password:
         return {}, 401
 
-    url = '{}/movie/{}/{}/{}'.format(config.API_URL, username, password, stream_file)
+    url = '{}/movie/{}/{}/{}'.format(subscriber_server, username, password, stream_file)
 
-    return redirect(url, code=308)
+    return redirect(url, code=302)
 
 
 @app.route('/series/<username>/<password>/<stream_file>', methods=['GET'])
 def series_stream(username, password, stream_file):
-    if not valid_user(username, password):
+    subscriber_server, server_username, server_password = valid_subscriber(request.args.get('username', None), request.args.get('password', None))
+
+    if not subscriber_server or not server_username or not server_password:
         return {}, 401
 
-    url = '{}/series/{}/{}/{}'.format(config.API_URL, username, password, stream_file)
+    url = '{}/series/{}/{}/{}'.format(subscriber_server, username, password, stream_file)
 
-    return redirect(url, code=308)
+    return redirect(url, code=302)

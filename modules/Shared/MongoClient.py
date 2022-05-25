@@ -11,4 +11,5 @@ def mongoClient():
         logger.exception(e)
         return None
 
+
 mongo_client = mongoClient()

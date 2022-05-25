@@ -23,10 +23,10 @@ class CSRFClass():
         try:
             if not csrf:
                 return False
-                
+
             col_csrf = mongo_client[config.MONGO_DB][config.MONGO_CSRF_COLLECTION]
 
-            time_difference = datetime.now() - timedelta(minutes=1)
+            time_difference = datetime.now() - timedelta(minutes=config.CSRF_TIME_TO_LIVE)
 
             col_csrf.delete_many({'created_at': {'$lte': time_difference}})
 
