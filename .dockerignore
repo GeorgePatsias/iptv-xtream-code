@@ -1,0 +1,9 @@
+__pycache__/
+mongo_db/
+*.log
+docker-compose.yml
+venv/
+Dockerfile*
+nginx_config
+README.md
+build_images.sh
