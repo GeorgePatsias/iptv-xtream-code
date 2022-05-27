@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Login - Streamflix</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link href="static/css/styles.css" rel="stylesheet" />
+  </script>
+</head>
+
+<body class="bg-primary background-img">
+  <div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+      <main>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-5">
+              <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <div class="card-header">
+                  <h1 class="text-center font-weight-light my-4"><i class="fa-solid fa-tv"></i> Streamflix</h1>
+                </div>
+                <div class="card-body">
+                  <form action="/login" method="POST">
+                    <h6 id="error_msg" class="mb-1 text-danger">{{ error_message|e }}</h6>
+                    <div class="form-floating mb-3">
+                      <input class="form-control rounded-pill" id="inputUsername" type="text" name="username"
+                        placeholder="Enter Username" value="administrator" autocomplete="off" required />
+                      <label for="inputUsername">
+                        <h6><i class="fa-solid fa-user"></i> Username</h6>
+                      </label>
+                    </div>
+                    <div class="form-floating mb-3">
+                      <input class="form-control rounded-pill" id="inputPassword" type="password" name="password"
+                        placeholder="Enter Password" value="Password1!" autocomplete="off" required />
+                      <label for="inputPassword">
+                        <h6><i class="fa-solid fa-key"></i> Password</h6>
+                      </label>
+                    </div>
+                    <input class="form-control csrf-token" name="csrf_token" value="{{ csrf_token|e }}" readonly>
+                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                      <button type="submit" class="btn btn-primary w-100 rounded-pill"><i
+                          class="fa-solid fa-arrow-right-to-bracket"></i> Login</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                  <div class="small"><a href="#">Need help?</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div id="layoutAuthentication_footer">
+      <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+          <div class="d-flex align-items-center justify-content-between small">
+            <div class="text-muted">Copyright &copy; Streamflix 2022</div>
+            <div>
+              <a href="#">Privacy Policy</a>
+              &middot;
+              <a href="#">Terms &amp; Conditions</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  {% include 'scripts.html' %}
+</body>
+
+</html>

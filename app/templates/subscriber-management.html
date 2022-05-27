@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Subscriber Management | Streamflix</title>
+  {% include 'head.html' %}
+</head>
+
+
+<body class="sb-nav-fixed">
+  {% include 'topbar.html' %}
+
+  <div id="layoutSidenav">
+    {% include 'navbar.html' %}
+
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Subscribers</h1>
+          <div class="row">
+            <div class="col-xl-12">
+
+              <div class="pb-3">
+                <button type='button' id='btnAddUser' class='btn btn-success' data-bs-toggle="modal"
+                  data-bs-target="#addSubscriberModal">Add Subscriber</button>
+              </div>
+              <span id="error_msg">{{ error_message|e }}</span>
+
+              <table id="tbl-subscribers" class="display cell-border" cellspacing="0" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>Server</th>
+                    <th>Creation</th>
+                    <th>Expiration</th>
+                    <th>Last Activity</th>
+                    <th>Notes</th>
+                    <th>Locked</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </main>
+
+
+
+
+
+
+
+
+
+
+      <!-- ADD SUBSCRIBER MODAL-->
+      <div class="modal fade" id="addSubscriberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addSubscriberModalLabel">Add Subsriber</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/subscriber/add" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputUsername" minlength="2" maxlength="30" type="text"
+                    name="username" placeholder="Enter Username" value="" autocomplete="off" required />
+                  <label for="inputUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputPassword" minlength="6" maxlength="100" type="text"
+                    name="password" placeholder="Enter Password" value="" autocomplete="off" required />
+                  <label for="inputPassword">
+                    <h6><i class="fa-solid fa-key"></i> Password</h6>
+                  </label>
+                </div>
+                <div class="form-floating mb-3">
+                  <select class="form-select rounded-pill" aria-label="Select Server" name="server">
+                    {% for server in server_data %}
+                    <option value="{{ server }}">{{ server }}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="inputServer">
+                    <h6><i class="fa-solid fa-server"></i> Server</h6>
+                  </label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputExpiration" type="date" name="expiration" min=""
+                    value="" autocomplete="off" required />
+                  <label for="inputServer">
+                    <h6><i class="fa-solid fa-calendar-xmark"></i> Expiration</h6>
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" id="inputNotes" name="notes" placeholder="Enter Notes" value=""
+                    autocomplete="off" required></textarea>
+                  <label for="inputNotes">
+                    <h6><i class="fa-solid fa-message"></i> Notes</h6>
+                  </label>
+                </div>
+                <input class="form-control csrf-token" value="{{ csrf_token|e }}" name="csrf_token" readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success rounded-pill">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+      <!-- EDIT SUBSCRIBER MODAL-->
+      <div class="modal fade" id="editSubscriberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editSubscriberModalLabel">Edit Subsriber</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/subscriber/edit" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputEditUsername" type="text" name="username"
+                    placeholder="Enter Username" value="" autocomplete="off" minlength="2" maxlength="30" required />
+                  <label for="inputEditUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                  <input class="form-control" id="inputEditOldUsername" type="text" name="username_old" value=""
+                    autocomplete="off" readonly />
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputEditPassword" min="6" max="100" type="text"
+                    name="password" placeholder="Enter Password" value="" autocomplete="off" required />
+                  <label for="inputEditPassword">
+                    <h6><i class="fa-solid fa-key"></i> Password</h6>
+                  </label>
+                </div>
+                <div class="form-floating mb-3">
+                  <select class="form-select rounded-pill" id="selectEditServer" aria-label="Select Server"
+                    name="server">
+                    {% for server in server_data %}
+                    <option value="{{ server }}">{{ server }}</option>
+                    {% endfor %}
+                  </select>
+                  <label for="inputServer">
+                    <h6><i class="fa-solid fa-server"></i> Server</h6>
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputEditExpiration" type="date" min="" name="expiration"
+                    value="" autocomplete="off" required />
+                  <label for="inputEditExpiration">
+                    <h6><i class="fa-solid fa-calendar-xmark"></i> Expiration</h6>
+                  </label>
+                </div>
+
+                <div class="form-floating mb-3">
+                  <textarea class="form-control" id="inputEditNotes" name="notes" placeholder="Enter Notes" value=""
+                    autocomplete="off" required></textarea>
+                  <label for="inputEditNotes">
+                    <h6><i class="fa-solid fa-message"></i> Notes</h6>
+                  </label>
+                </div>
+                <input class="form-control csrf-token" value="{{ csrf_token|e }}" name="csrf_token" readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success rounded-pill">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+      <!-- DELETE SUBSCRIBER MODAL -->
+      <div class="modal fade" id="deleteSubscriberModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteSubscriberModalLabel">Delete Subscriber</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/subscriber/delete" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputDeleteUsername" type="text" name="username"
+                    placeholder="Enter Username" value="" autocomplete="off" readonly />
+                  <label for="inputDeleteUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <input class="form-control csrf-token" type="hidden" value="{{ csrf_token|e }}" name="csrf_token"
+                  readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" id="btnModalDelete" class="btn btn-danger rounded-pill">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- LOCK SUBSCRIBER MODAL -->
+      <div class="modal fade" id="lockSubscriberModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="lockSubscriberModalLabel">Lock/Unlock Admin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/subscriber/lock" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputLockUsername" type="text" name="username"
+                    placeholder="Enter Username" value="" autocomplete="off" readonly />
+                  <label for="inputLockUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <input class="form-control rounded-pill" id="inputLockStatus" type="text" name="locked" value=""
+                  readonly />
+                <input class="form-control csrf-token" type="hidden" value="{{ csrf_token|e }}" name="csrf_token"
+                  readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" id="btnModalLock" class="btn btn-warning rounded-pill">Lock</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% include 'footer.html' %}
+    </div>
+  </div>
+
+  {% include 'scripts.html' %}
+  {% include 'datatables.html' %}
+  <script src="static/js/subscriber-management.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

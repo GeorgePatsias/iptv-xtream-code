@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Admin Management | Streamflix</title>
+  {% include 'head.html' %}
+</head>
+
+<body class="sb-nav-fixed">
+  {% include 'topbar.html' %}
+
+  <div id="layoutSidenav">
+    {% include 'navbar.html' %}
+
+    <div id="layoutSidenav_content">
+      <main>
+        <div class="container-fluid px-4">
+          <h1 class="mt-4">Admins</h1>
+          <div class="row">
+            <div class="col-xl-12">
+
+              <div class="pb-3">
+                <button type='button' id='btnAddAdmin' class='btn btn-success' data-bs-toggle="modal"
+                  data-bs-target="#addAdminModal">Add Admin</button>
+              </div>
+              <span id="error_msg">{{ error_message|e }}</span>
+
+              <table id="tbl-admins" class="display cell-border" cellspacing="0" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>Username</th>
+                    <th>Creation</th>
+                    <th>Last Activity</th>
+                    <th>Locked</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- ADD ADMIN MODAL -->
+      <div class="modal fade" id="addAdminModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addAdminModalLabel">Add Admin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/admin/add" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputUsername" minlength="2" maxlength="30" type="text"
+                    name="username" placeholder="Enter Username" value="" autocomplete="off" required />
+                  <label for="inputUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputPassword" minlength="6" maxlength="100"
+                    type="password" name="password" placeholder="Enter Password" value="" autocomplete="off" required />
+                  <label for="inputPassword">
+                    <h6><i class="fa-solid fa-key"></i> Password</h6>
+                  </label>
+                </div>
+                <input class="form-control csrf-token" value="{{ csrf_token|e }}" name="csrf_token" readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success rounded-pill">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- DELETE ADMIN MODAL -->
+      <div class="modal fade" id="deleteAdminModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="deleteAdminModalLabel">Delete Admin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/admin/delete" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputDeleteUsername" type="text" name="username"
+                    placeholder="Enter Username" value="" autocomplete="off" readonly />
+                  <label for="inputDeleteUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <input class="form-control csrf-token" type="hidden" value="{{ csrf_token|e }}" name="csrf_token"
+                  readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" id="btnModalDelete" class="btn btn-danger rounded-pill">Delete</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- LOCK ADMIN MODAL -->
+      <div class="modal fade" id="lockAdminModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content form-floating">
+            <div class="modal-header">
+              <h5 class="modal-title" id="lockAdminModalLabel">Lock/Unlock Admin</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/admin/lock" method="POST">
+              <div class="modal-body">
+                <div class="form-floating mb-3">
+                  <input class="form-control rounded-pill" id="inputLockUsername" type="text" name="username"
+                    placeholder="Enter Username" value="" autocomplete="off" readonly />
+                  <label for="inputLockUsername">
+                    <h6><i class="fa-solid fa-user"></i> Username</h6>
+                  </label>
+                </div>
+                <input class="form-control rounded-pill" id="inputLockStatus" type="text" name="locked" value=""
+                  readonly />
+                <input class="form-control csrf-token" type="hidden" value="{{ csrf_token|e }}" name="csrf_token"
+                  readonly>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Close</button>
+                <button type="submit" id="btnModalLock" class="btn btn-warning rounded-pill">Lock</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {% include 'footer.html' %}
+    </div>
+  </div>
+
+  {% include 'scripts.html' %}
+  {% include 'datatables.html' %}
+  <script src="static/js/admins-management.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
