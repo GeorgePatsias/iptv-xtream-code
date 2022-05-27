@@ -4,3 +4,6 @@ venv
 config.py
 docker-compose.yml
 server.log
+nginx_config
+*.log
+*.conf
