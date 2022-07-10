@@ -7,3 +7,5 @@ Dockerfile*
 nginx_config
 README.md
 build_images.sh
+init_mongodb.py
+.config.py

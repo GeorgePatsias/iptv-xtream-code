@@ -2,8 +2,10 @@ mongo_db/
 __pycache__
 venv
 config.py
-docker-compose.yml
 server.log
 nginx_config
 *.log
 *.conf
+.htpasswd
+*.pem
+*.crt
