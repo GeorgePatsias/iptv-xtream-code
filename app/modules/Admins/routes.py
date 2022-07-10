@@ -130,19 +130,19 @@ def admin_delete():
 def admin_lock():
     try:
         if not CSRFClass().is_valid_csrf(request.form['csrf_token']):
-            return redirect(url_for('admins.admins_error', error_message='Please refresh the page and try again!4'))
+            return redirect(url_for('admins.admins_error', error_message='Please refresh the page and try again!'))
 
         username = request.form['username']
         locked = request.form['locked']
 
         if not username or not locked:
-            return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!3'))
+            return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!'))
 
         username = escape(username)
         locked = escape(locked)
 
         if username == 'administrator':
-            return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!2'))
+            return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!'))
 
         if locked == 'false':
             locked = 'true'
@@ -158,4 +158,4 @@ def admin_lock():
 
     except Exception as e:
         logger.exception(e)
-        return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!1'))
+        return redirect(url_for('admins.admins_error', error_message='Something went wrong, please try again!'))

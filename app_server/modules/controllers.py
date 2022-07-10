@@ -7,13 +7,16 @@ from config import MONGO_DB, MONGO_SUBSCRIBER_COLLECTION, MONGO_SERVERS_COLLECTI
 
 def valid_subscriber(username='', password=''):
     try:
+        if not all([username, password]):
+            return None, None, None
+
         username = escape(username)
         password = escape(password)
 
         mongo_client = mongoClient()
         col_subscribers = mongo_client[MONGO_DB][MONGO_SUBSCRIBER_COLLECTION]
 
-        subsriber_server = col_subscribers.find_one({
+        subscriber_server = col_subscribers.find_one({
             'username': username,
             'password': password,
             'locked': 'false',
@@ -24,20 +27,20 @@ def valid_subscriber(username='', password=''):
             '_id': 0, 'server': 1
         })
 
-        if not subsriber_server:
+        if not subscriber_server:
             logger.info('INVALID/EXPIRED USER {}:{}'.format(username, password))
             mongo_client.close()
             return None, None, None
 
         col_servers = mongo_client[MONGO_DB][MONGO_SERVERS_COLLECTION]
 
-        server_data = col_servers.find_one({'server': subsriber_server['server']}, {'_id': 0, 'username': 1, 'password': 1})
+        server_data = col_servers.find_one({'server': subscriber_server['server']}, {'_id': 0, 'username': 1, 'password': 1})
         mongo_client.close()
 
         if not server_data:
             return None, None, None
 
-        return subsriber_server['server'], server_data['username'], server_data['password']
+        return subscriber_server['server'], server_data['username'], server_data['password']
 
     except Exception as e:
         logger.exception(e)

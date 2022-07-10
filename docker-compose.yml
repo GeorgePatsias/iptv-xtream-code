@@ -1,0 +1,58 @@
+version: '3.3'
+
+services:
+  streamflix_app:
+    image: streamflix_app
+    container_name: streamflix_app
+    depends_on:
+      - "mongodb"
+    restart: unless-stopped
+    volumes:
+      - app_logs:/home/netadmin/streamflix_app/logs
+    dns: 1.1.1.1
+    networks:
+      - main_network
+
+  streamflix_server:
+    image: streamflix_server
+    container_name: streamflix_server
+    depends_on:
+      - "mongodb"
+    volumes:
+      - server_logs:/home/netadmin/streamflix_server/logs
+    dns: 1.1.1.1
+    networks:
+      - main_network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - ./mongo_db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=temp_pass
+    restart: unless-stopped
+    networks:
+      - main_network
+
+  nginx:
+    image: my_nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 443:443
+    dns: 1.1.1.1
+    volumes:
+      - nginx_logs:/var/log/nginx
+    networks:
+      - main_network
+
+volumes:
+  app_logs:
+  server_logs:
+  nginx_logs:
+
+
+networks:
+  main_network:

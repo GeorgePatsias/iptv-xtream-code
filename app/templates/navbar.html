@@ -13,17 +13,20 @@
         <a class="nav-link" href="/servers">
           <div class="sb-nav-link-icon"><i class="fas fa-server me-1" aria-hidden="true"></i></div>Servers
         </a>
-        <a class="nav-link" href="/plans">
+        <!-- <a class="nav-link" href="/plans">
           <div class="sb-nav-link-icon"><i class="fa-solid fa-euro-sign me-1" aria-hidden="true"></i></div>Plan Packages
-        </a>
+        </a> -->
         <a class="nav-link" href="/subscribers">
           <div class="sb-nav-link-icon"><i class="fa fa-users" aria-hidden="true"></i></div>Subscribers
         </a>
+        <!-- <a class="nav-link" href="/subscribers2">
+          <div class="sb-nav-link-icon"><i class="fa fa-users" aria-hidden="true"></i></div>Subscribers2
+        </a> -->
       </div>
     </div>
     <div class="sb-sidenav-footer">
       <div class="small">Logged in as:</div>
-      {{ current_user.id }}
+      <i class="fa-solid fa-circle fa-2xs" style="color:#00FF00"></i> {{ current_user.id }}
     </div>
   </nav>
 </div>

@@ -6,7 +6,7 @@ from modules.Shared.Headers import headers
 from modules.Shared.MongoClient import mongoClient
 from flask_login import LoginManager, login_manager
 from flask import Flask, send_from_directory, session, redirect
-from config import MONGO_DB, MONGO_ADMINS_COLLECTION, SESSION_EXPIRE, FLASK_HOST, FLAST_PORT, FLASK_DEBUG, FLASK_THREADED, FLASK_SECRET
+from config import MONGO_DB, MONGO_ADMINS_COLLECTION, SESSION_EXPIRE, FLASK_HOST, FLASK_PORT, FLASK_DEBUG, FLASK_THREADED, FLASK_SECRET, SESSION_COOKIE_SECURE, SESSION_COOKIE_HTTPONLY, SESSION_COOKIE_SAMESITE, SESSION_COOKIE_PATH, SESSION_COOKIE_NAME
 
 
 import modules.Login.routes
@@ -15,6 +15,7 @@ import modules.Admins.routes
 import modules.Servers.routes
 import modules.Dashboard.routes
 import modules.Subscribers.routes
+import modules.Subscribers2.routes
 
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET
@@ -26,6 +27,7 @@ app.register_blueprint(modules.Admins.routes.app)
 app.register_blueprint(modules.Servers.routes.app)
 app.register_blueprint(modules.Dashboard.routes.app)
 app.register_blueprint(modules.Subscribers.routes.app)
+app.register_blueprint(modules.Subscribers2.routes.app)
 
 
 @app.route('/favicon.ico', methods=['GET'])
@@ -83,17 +85,16 @@ def make_session_permanent():
 
 if __name__ == '__main__':
     app.config.update(
-        # SESSION_COOKIE_SECURE=True,
-        SESSION_COOKIE_SECURE=False,
-        SESSION_COOKIE_HTTPONLY=True,
-        # SESSION_COOKIE_SAMESITE='None',
-        SESSION_COOKIE_PATH='/',
-        SESSION_COOKIE_NAME='Cookie'
+        SESSION_COOKIE_SECURE=SESSION_COOKIE_SECURE,
+        SESSION_COOKIE_HTTPONLY=SESSION_COOKIE_HTTPONLY,
+        SESSION_COOKIE_SAMESITE=SESSION_COOKIE_SAMESITE,
+        SESSION_COOKIE_PATH=SESSION_COOKIE_PATH,
+        SESSION_COOKIE_NAME=SESSION_COOKIE_NAME
     )
 
     app.run(
         host=FLASK_HOST,
-        port=FLAST_PORT,
+        port=FLASK_PORT,
         debug=FLASK_DEBUG,
         threaded=FLASK_THREADED
     )
