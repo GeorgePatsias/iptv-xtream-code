@@ -1,2 +1,2 @@
 # iptv-xtream-code
-Server for IPTV xtream code
+Server and management platform for IPTV xtream code
