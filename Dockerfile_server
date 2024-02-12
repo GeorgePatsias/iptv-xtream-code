@@ -20,9 +20,9 @@ RUN addgroup -g 1000 netadmin
 RUN adduser -u 1000 -G netadmin -h /home/netadmin -D netadmin
 USER netadmin
 
-RUN mkdir -p /home/netadmin/streamflix_server
+RUN mkdir -p /home/netadmin/server
 
-WORKDIR /home/netadmin/streamflix_server
+WORKDIR /home/netadmin/server
 
 COPY --chown=netadmin:netadmin ./nginx-conf/cert.pem cert.pem
 COPY --chown=netadmin:netadmin ./nginx-conf/key.pem key.pem

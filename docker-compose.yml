@@ -1,25 +1,25 @@
 version: '3.3'
 
 services:
-  streamflix_app:
-    image: streamflix_app
-    container_name: streamflix_app
+  app:
+    image: app
+    container_name: app
     depends_on:
       - "mongodb"
     restart: unless-stopped
     volumes:
-      - app_logs:/home/netadmin/streamflix_app/logs
+      - app_logs:/home/netadmin/app/logs
     dns: 1.1.1.1
     networks:
       - main_network
 
-  streamflix_server:
-    image: streamflix_server
-    container_name: streamflix_server
+  server:
+    image: server
+    container_name: server
     depends_on:
       - "mongodb"
     volumes:
-      - server_logs:/home/netadmin/streamflix_server/logs
+      - server_logs:/home/netadmin/server/logs
     dns: 1.1.1.1
     networks:
       - main_network

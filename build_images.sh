@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Build Images
-docker build --no-cache -f Dockerfile_app -t streamflix_app .;
-docker build --no-cache -f Dockerfile_server -t streamflix_server .;
+docker build --no-cache -f Dockerfile_app -t app .;
+docker build --no-cache -f Dockerfile_server -t server .;
 docker build -f Dockerfile_nginx -t my_nginx .;
 
 # Start Docker Compose

@@ -4,7 +4,7 @@ from modules.Logger import logger
 from flask import Flask, request, Response
 from modules.MongoClient import mongoClient
 from modules.controllers import valid_subscriber
-from config import FLASK_SECRET, MONGO_DB, MONGO_SUBSCRIBER_COLLECTION, STREAMFLIX_SERVER_IP, STREAMFLIX_SERVER_PORT, STREAMING_CHUNK_SIZE, STREAMING_CHUNK_SIZE, STREAMING_CHUNK_SIZE, FLASK_HOST, FLASK_PORT, FLASK_DEBUG, FLASK_THREADED, STREAMFLIX_SERVER_PROTOCOL, STREAMFLIX_SERVER_HTTPS_PORT
+from config import FLASK_SECRET, MONGO_DB, MONGO_SUBSCRIBER_COLLECTION, SERVER_IP, SERVER_PORT, STREAMING_CHUNK_SIZE, STREAMING_CHUNK_SIZE, STREAMING_CHUNK_SIZE, FLASK_HOST, FLASK_PORT, FLASK_DEBUG, FLASK_THREADED, SERVER_PROTOCOL, SERVER_HTTPS_PORT
 
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET
@@ -53,10 +53,10 @@ def player_api():
             if all([response_json.get('server_info', None), response_json.get('user_info', None)]):
                 response_json['user_info']['username'] = username
                 response_json['user_info']['password'] = password
-                response_json['server_info']['url'] = STREAMFLIX_SERVER_IP
-                response_json['server_info']['port'] = STREAMFLIX_SERVER_PORT
-                response_json['server_info']['server_protocol'] = STREAMFLIX_SERVER_PROTOCOL
-                response_json['server_info']['https_port'] = STREAMFLIX_SERVER_HTTPS_PORT
+                response_json['server_info']['url'] = SERVER_IP
+                response_json['server_info']['port'] = SERVER_PORT
+                response_json['server_info']['server_protocol'] = SERVER_PROTOCOL
+                response_json['server_info']['https_port'] = SERVER_HTTPS_PORT
 
                 return response_json, response.status_code
 
