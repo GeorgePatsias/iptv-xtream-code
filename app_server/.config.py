@@ -2,7 +2,7 @@ FLASK_HOST = "0.0.0.0"
 FLASK_PORT = 443
 FLASK_DEBUG = False
 FLASK_THREADED = True
-LOGGER_PATH = "./logs/streamflix-server.log"
+LOGGER_PATH = "./logs/server.log"
 
 FLASK_SECRET = "flask_secret"
 
